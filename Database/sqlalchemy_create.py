@@ -209,3 +209,19 @@ str(s)
 rs = engine.execute(s).fetchall()
 for row in rs:
     print(row)
+# Joins
+s = select([
+        orders.c.id.label('order_id'),
+        orders.c.date_placed,
+        order_lines.c.quantity,
+        items.c.name,
+]).select_from(
+        orders.join(customers).join(order_lines).join(items)
+    ).where(customers.c.first_name == "John", customers.c.last_name == "Green",)
+
+str(s)
+rs = engine.execute(s)
+rs.keys()
+rs.fetchall()
+for row in rs:
+    print(row)
