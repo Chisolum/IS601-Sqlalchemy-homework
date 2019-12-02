@@ -179,3 +179,11 @@ r.fetchall()
 rs = engine.execute(s)
 for row in rs:
     print(row)
+# Filtering records
+s = select([items]).where(
+    items.c.cost_price > 20)
+str(s)
+rs = engine.execute(s)
+r.fetchall()
+for row in rs:
+    print(row)
