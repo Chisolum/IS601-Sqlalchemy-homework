@@ -202,3 +202,10 @@ rs = engine.execute(s).fetchall()
 for row in rs:
     print(row)
 # Ordering results
+s = select([items]).where(
+    items.c.quantity > 10
+).order_by(items.c.cost_price)
+str(s)
+rs = engine.execute(s).fetchall()
+for row in rs:
+    print(row)
