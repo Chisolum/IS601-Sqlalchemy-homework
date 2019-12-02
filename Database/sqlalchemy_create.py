@@ -1,14 +1,11 @@
-import sqlite3
+from sqlalchemy import select
 from sqlalchemy import create_engine, MetaData, Table, Integer, String, \
     Column, DateTime, ForeignKey, Numeric, CheckConstraint
 from datetime import datetime
 
-# conn = sqlite3.connect('/web/Sqlite-Data/sqlite3.db')
 engine = create_engine('sqlite:///Sqlite-Data/sqlite3.db')
 
 metadata = MetaData()
-
- # engine = create_engine("postgres+psycopg2://postgres:pass@localhost/sqlalchemy_tuts")
 
 customers = Table('customers', metadata,
                   Column('id', Integer(), primary_key=True),
@@ -167,8 +164,18 @@ order_line_list = [
     },
 ]
 
+
 engine.execute(items.insert(), items_list)
 engine.execute(customers.insert(), customers_list)
 engine.execute(orders.insert(), order_list)
 engine.execute(order_lines.insert(), order_line_list)
 metadata.create_all(engine)
+
+# Selecting records
+s = select([customers])
+str(s)
+r = engine.execute(s)
+r.fetchall()
+rs = engine.execute(s)
+for row in rs:
+    print(row)
