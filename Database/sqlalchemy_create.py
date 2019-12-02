@@ -187,3 +187,18 @@ rs = engine.execute(s)
 r.fetchall()
 for row in rs:
     print(row)
+    s = select([items]). \
+        where(
+        ~(items.c.quantity == 50) &
+        (items.c.cost_price < 20)
+    )
+    engine.execute(s).fetchall()
+
+# Comparison operators
+s = select([orders]).where(
+    orders.c.date_shipped == 'None')
+str(s)
+rs = engine.execute(s).fetchall()
+for row in rs:
+    print(row)
+# Ordering results
