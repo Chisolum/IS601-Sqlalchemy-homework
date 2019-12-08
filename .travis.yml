@@ -5,7 +5,7 @@ install:
   - pip install --upgrade pip
 # command to run tests
 script:
-  - python -m  unittest discover -s  Database/sqlalchemy_create.py
+  - docker-compose
 
 branches:
   only:
