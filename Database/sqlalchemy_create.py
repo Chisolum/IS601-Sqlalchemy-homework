@@ -1,4 +1,5 @@
 from sqlalchemy import select
+from sqlalchemy.sql import func
 from sqlalchemy import create_engine, MetaData, Table, Integer, String, \
     Column, DateTime, ForeignKey, Numeric, CheckConstraint
 from datetime import datetime
@@ -217,7 +218,7 @@ s = select([
         items.c.name,
 ]).select_from(
         orders.join(customers).join(order_lines).join(items)
-    ).where(customers.c.first_name == "John", customers.c.last_name == "Green",)
+    ).where and_(customers.c.first_name == "John", customers.c.last_name == "Green",)
 
 str(s)
 rs = engine.execute(s)
@@ -225,3 +226,15 @@ rs.keys()
 rs.fetchall()
 for row in rs:
     print(row)
+
+# Grouping results
+
+c = [
+    func.count("*").label('count'),
+    customers.c.town
+]
+
+s = select(c).group_by(customers.c.town)
+
+print(s)
+engine.execute(s).fetchall()
