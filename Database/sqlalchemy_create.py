@@ -1,11 +1,15 @@
 from sqlalchemy import select
 from sqlalchemy.sql import func
+from sqlalchemy import distinct
+from sqlalchemy import cast, Date, distinct, union
+from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, MetaData, Table, Integer, String, \
     Column, DateTime, ForeignKey, Numeric, CheckConstraint
 from datetime import datetime
 
-engine = create_engine('sqlite:///Sqlite-Data/sqlite3.db')
 
+engine = create_engine('sqlite:///Sqlite-Data/sqlite3.db')
+session = Session(bind=engine)
 metadata = MetaData()
 
 customers = Table('customers', metadata,
@@ -210,22 +214,6 @@ str(s)
 rs = engine.execute(s).fetchall()
 for row in rs:
     print(row)
-# Joins
-s = select([
-        orders.c.id.label('order_id'),
-        orders.c.date_placed,
-        order_lines.c.quantity,
-        items.c.name,
-]).select_from(
-        orders.join(customers).join(order_lines).join(items)
-    ).where and_(customers.c.first_name == "John", customers.c.last_name == "Green",)
-
-str(s)
-rs = engine.execute(s)
-rs.keys()
-rs.fetchall()
-for row in rs:
-    print(row)
 
 # Grouping results
 
@@ -238,3 +226,18 @@ s = select(c).group_by(customers.c.town)
 
 print(s)
 engine.execute(s).fetchall()
+# Joins
+s = select([
+        orders.c.id.label('order_id'),
+        orders.c.date_placed,
+        order_lines.c.quantity,
+        items.c.name,
+]).select_from(
+        orders.join(customers).join(order_lines).join(items)
+    ).where and (customers.c.first_name == "John", customers.c.last_name == "Green",)
+
+str(s)
+rs = engine.execute(s).fetchall()
+for row in rs:
+    print(row)
+
