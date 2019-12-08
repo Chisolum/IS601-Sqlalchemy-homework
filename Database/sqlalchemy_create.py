@@ -1,10 +1,8 @@
 from sqlalchemy import select
 from sqlalchemy.sql import func
-from sqlalchemy import distinct
-from sqlalchemy import cast, Date, distinct, union
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, MetaData, Table, Integer, String, \
-    Column, DateTime, ForeignKey, Numeric, CheckConstraint
+    Column, DateTime, ForeignKey, Numeric, CheckConstraint, cast, Date, distinct, union
 from datetime import datetime
 
 
@@ -237,7 +235,9 @@ s = select([
     ).where and (customers.c.first_name == "John", customers.c.last_name == "Green",)
 
 str(s)
-rs = engine.execute(s).fetchall()
-for row in rs:
-    print(row)
+# Deleting data
+i = session.query(items).filter(items.name == 'Monitor') .one()
+i
+session.delete(i)
+session.commit()
 
